@@ -143,7 +143,7 @@ def parse_args(argv):
             argv = [input('Enter polynomial:\t')]
         except KeyboardInterrupt:
             exit()
-
+    argv = [arg for arg in argv if not re.fullmatch(r'-\w', arg)]
     polynomial_line = argv[0]
     return {'use_common_fractions': use_common_fractions, 'history_mode': history_mode, 'debug_mode': debug_mode,
             'use_superscripts': use_superscripts, 'polynomial_line': polynomial_line}
