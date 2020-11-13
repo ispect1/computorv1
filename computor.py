@@ -71,7 +71,7 @@ def main(dirty_polynomial_line, use_common_fractions=False, debug_mode=False, us
     return
 
 
-names = []
+names = set()
 
 
 def completer(text, state):
@@ -101,12 +101,13 @@ if __name__ == '__main__':
         readline.parse_and_bind("tab: complete")
 
         if input_line and input_line != '-i':
+            print(f'{input_line=}')
+            if input_line not in names:
+                names.add(input_line)
             main(input_line, **arguments)
         try:
-            line = input('\nEnter polynomial\n')
+            input_line = input('\nEnter polynomial\n')
         except (KeyboardInterrupt, EOFError):
             break
-        if not line or line == 'q':
+        if not input_line or input_line in ('q', 'exit', 'quit', 'exit()', 'quit()'):
             break
-        if line not in names:
-            names.append(line)

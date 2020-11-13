@@ -122,6 +122,7 @@ def parse_args(argv):
     history_mode = False
     debug_mode = False
     use_superscripts = False
+    polynomial_line = ''
     argv = argv[1:]
     if '-h' in argv or '--help' in argv:
         print('usage: computor\n\tLINE\n\t[-h] (help)\n\t[-c] (print common fractions)\n\t[-d] (print debug info)\n\t'
@@ -138,12 +139,12 @@ def parse_args(argv):
 
     if '-d' in argv:
         debug_mode = True
+    argv = [arg for arg in argv if not re.fullmatch(r'-\w', arg)]
     if not argv:
         try:
-            argv = [input('Enter polynomial:\t')]
+            argv = [input('\nEnter polynomial\n')]
         except KeyboardInterrupt:
             exit()
-    argv = [arg for arg in argv if not re.fullmatch(r'-\w', arg)]
     polynomial_line = argv[0]
     return {'use_common_fractions': use_common_fractions, 'history_mode': history_mode, 'debug_mode': debug_mode,
             'use_superscripts': use_superscripts, 'polynomial_line': polynomial_line}
