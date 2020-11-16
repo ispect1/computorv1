@@ -101,7 +101,6 @@ if __name__ == '__main__':
         readline.parse_and_bind("tab: complete")
 
         if input_line and input_line != '-i':
-            print(f'{input_line=}')
             if input_line not in names:
                 names.add(input_line)
             main(input_line, **arguments)

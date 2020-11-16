@@ -7,10 +7,6 @@ def search_terms(prepare_line):
 
 
 def parse_term(term: str):
-    # TODO
-    # if not term:
-    #     return None
-
     coef = re.fullmatch(num_regex, term)
     if coef:
         return {'coef': float(coef.group())}
@@ -48,7 +44,7 @@ def parse_polynomial(prepare_line, debug_mode=False):
                 coef *= new_term.get('coef', 1) * (-1 if curr_operation == '-' else 1)
                 degree += new_term.get('degree', 0)
             if debug_mode:
-                print(f'{term=}\t{next_operation=}', '-->', f'{coef=},{degree=}')
+                print(f'term={term}\tnext_operation={next_operation}', '-->', f'coef={coef},degree={degree}')
             if not next_operation or next_operation == '+' or next_operation == '-':
                 all_terms.append({'degree': degree, 'coef': coef * (1 if i == 0 else -1)})
                 degree = 0
