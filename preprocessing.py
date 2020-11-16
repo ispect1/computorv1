@@ -32,7 +32,9 @@ def parse_polynomial(prepare_line, debug_mode=False):
         coef = 1
         degree = 0
         for term, next_operation in search_terms(part):
+            # print(term, f"'{next_operation}'")
             new_term = parse_term(term)
+            # print('new_term', new_term)
             if curr_operation == '/':
                 num = new_term.get('coef', 1) * (-1 if curr_operation == '-' else 1)
                 if num == 0:

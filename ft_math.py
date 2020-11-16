@@ -54,7 +54,7 @@ def solve_second_degree_polynom(polynomial_struct):
     a = polynomial_struct[2]
     b = polynomial_struct.get(1, 0)
     if D < 0:
-        print('Discriminant negative')
+        print('Discriminant is strictly negative')
         return solve_negative_discriminant(polynomial_struct)
     elif D == 0:
         print('Discriminant is zero')

@@ -3,13 +3,13 @@
 Installation
 ---
 ```shell script
-python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+python3 -m venv venv && source venv/bin/activate
 ```
 
 Usage
 ---
 ```
-python comptor.py [-h] [-c] [-d] [-i] [equation]
+python computor.py [-h] [-c] [-d] [-i] [-s] [equation]
 ```
 
 Examples

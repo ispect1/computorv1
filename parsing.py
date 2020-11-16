@@ -10,13 +10,13 @@ def is_valid_equation(polynomial: str):
         return False
     equation_alphabet_symbols = get_alphabet_symbols(polynomial)
     if len(equation_alphabet_symbols) > 1:
-        print('В уравнении должно быть только не больше одной однобуквенной неизвестной')
+        print('The equation should only have at most one one-letter unknown')
         return False
-    invalid_symbols = set(polynomial) - set(re.findall(rf'[{string.digits}.=*/+\-^ \t{equation_alphabet_symbols}()\s]',
+    invalid_symbols = set(polynomial) - set(re.findall(rf'[{string.digits}.=*/+\-^\s"\'`{equation_alphabet_symbols}()]',
                                                        polynomial))
     if invalid_symbols:
         invalid_symbols = ''.join(invalid_symbols)
-        print(f'Встречаются недопустимые символы: `{invalid_symbols}`')
+        print(f'Invalid characters are encountered: `{invalid_symbols}`')
         return False
     return True
 
@@ -36,6 +36,7 @@ def prepare_polynomial(line):
     prepare_line = re.sub(r'(X)[*]{2}(\d|\()', r'\1^\2', prepare_line)
 
     prepare_line = re.sub(r'\s+', '', prepare_line).strip('\'"`')
+    prepare_line = re.sub(r'[1]?X', '1*X', prepare_line)
     return prepare_line, var_symbol
 
 
@@ -80,7 +81,6 @@ def decimal2common_fraction(number):
 
 
 def transform_polynom_to_unicode(polynom_line: str, var_symbol='X'):
-    # TODO
     polynom_line = re.sub(fr'({var_symbol})\^\(?(-?\d+)\)?', r'\1\2', polynom_line)
     while re.search(fr'{var_symbol}\^?(-?\d+)', polynom_line):
         regex = re.search(fr'{var_symbol}\^?(-?\d+)', polynom_line)
@@ -111,7 +111,8 @@ def get_reduced_form(polynomial_struct: dict, var_symbol='X', use_common_fractio
             polynomial_reduce_line += f'*{var_symbol}^({degree})'
     polynomial_reduce_line = polynomial_reduce_line.strip(' +') + ' = 0'
     polynomial_reduce_line = re.sub(r'^- ', r'-', polynomial_reduce_line)
-    polynomial_reduce_line = re.sub(r'[^/](-?)1\*', r'\1', polynomial_reduce_line)
+    polynomial_reduce_line = re.sub(fr'([^/\d.]|^)([\-]?)1[*]{var_symbol}', fr'\1\2{var_symbol}', polynomial_reduce_line)
+    polynomial_reduce_line = re.sub(fr'{var_symbol}[\^]1', var_symbol, polynomial_reduce_line)
     if use_superscripts:
         polynomial_reduce_line = transform_polynom_to_unicode(polynomial_reduce_line, var_symbol)
     return polynomial_reduce_line
@@ -122,11 +123,10 @@ def parse_args(argv):
     history_mode = False
     debug_mode = False
     use_superscripts = False
-    polynomial_line = ''
     argv = argv[1:]
     if '-h' in argv or '--help' in argv:
         print('usage: computor\n\tLINE\n\t[-h] (help)\n\t[-c] (print common fractions)\n\t[-d] (print debug info)\n\t'
-              '[-i] (use interactive mode)')
+              '[-i] (use interactive mode)\n\t[-s] (use superscripts)')
         exit()
     if '-c' in argv:
         use_common_fractions = True
