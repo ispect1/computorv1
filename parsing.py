@@ -112,7 +112,7 @@ def get_reduced_form(polynomial_struct: dict, var_symbol='X', use_common_fractio
     polynomial_reduce_line = polynomial_reduce_line.strip(' +') + ' = 0'
     polynomial_reduce_line = re.sub(r'^- ', r'-', polynomial_reduce_line)
     polynomial_reduce_line = re.sub(fr'([^/\d.]|^)([\-]?)1[*]{var_symbol}', fr'\1\2{var_symbol}', polynomial_reduce_line)
-    polynomial_reduce_line = re.sub(fr'{var_symbol}[\^]1', var_symbol, polynomial_reduce_line)
+    polynomial_reduce_line = re.sub(fr'{var_symbol}[\^]1(?=[^\d])', var_symbol, polynomial_reduce_line)
     if use_superscripts:
         polynomial_reduce_line = transform_polynom_to_unicode(polynomial_reduce_line, var_symbol)
     return polynomial_reduce_line
@@ -125,9 +125,22 @@ def parse_args(argv):
     use_superscripts = False
     argv = argv[1:]
     if '-h' in argv or '--help' in argv:
-        print('usage: computor\n\tLINE\n\t[-h] (help)\n\t[-c] (print common fractions)\n\t[-d] (print debug info)\n\t'
-              '[-i] (use interactive mode)\n\t[-s] (use superscripts)')
+        print('''
+usage: computor.py [-h] [-c] [-d] [-i] [-s] [equation]
+
+positional arguments:
+  equation              The equation to be solved. If this argument is not present,
+                        it will ask you to write via standard input
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c, --common          display the result in ordinary fractions
+  -d, --debug           debug mode
+  -i, --interactive     interactive mode (only unix or Docker) - save history input (⇥ ↑ ↓)
+  -s, --superscripts    display math symbols
+        ''')
         exit()
+
     if '-c' in argv:
         use_common_fractions = True
 

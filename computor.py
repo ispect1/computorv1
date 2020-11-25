@@ -8,11 +8,15 @@ from preprocessing import parse_polynomial
 from parsing import parse_args
 
 
-def prepare_solutions(solutions, var_symbol='X', use_common_fractions=False):
+def prepare_solutions(solutions, var_symbol='X', use_common_fractions=False, use_superscripts=False):
     if not solutions:
-        return '∅'
+        if use_superscripts:
+            return '∅'
+        return 'No solutions'
     if float('inf') in solutions:
-        return 'ℝ'
+        if use_superscripts:
+            return 'ℂ'
+        return 'All complex numbers'
     solutions_line = ''
     for solution in solutions:
 
@@ -66,7 +70,7 @@ def main(dirty_polynomial_line, use_common_fractions=False, debug_mode=False, us
         print(f'Invalid polynomial degree: {get_invalid_degree(polynomial_struct)}')
         return
     solutions = solve_equation(polynomial_struct)
-    solutions_line = prepare_solutions(solutions, var_symbol, use_common_fractions)
+    solutions_line = prepare_solutions(solutions, var_symbol, use_common_fractions, use_superscripts=use_superscripts)
     print(f'The solution is:\n{solutions_line}')
     return
 
